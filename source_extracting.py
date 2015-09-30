@@ -60,5 +60,4 @@ def find_all_objects(framecube, bad_frame_mask, frame_wcs, pngout, ifile):
 				all_extracted_objects = np.vstack((all_extracted_objects, np.asarray([objects['x'][new_objects],objects['y'][new_objects]]).T))
 			else:
 				all_extracted_objects = np.asarray([objects['x'],objects['y']]).T
-		#print "total number of objects: ", len(all_extracted_objects)
-	return all_extracted_objects
+	 return all_extracted_objects
