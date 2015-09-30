@@ -56,7 +56,6 @@ def find_all_objects(framecube, bad_frame_mask, frame_wcs, pngout):
 			if len(all_extracted_objects) > 0:
 				vertices = vertices_of_pixels(objects['xmin'], objects['xmax'], objects['ymin'], objects['ymax'])
 				new_objects = point_in_rect(all_extracted_objects,vertices) #returns array of True and False
-				print new_objects
 				all_extracted_objects = np.vstack((all_extracted_objects, np.asarray([objects['x'][new_objects],objects['y'][new_objects]]).T))
 			else:
 				all_extracted_objects = np.asarray([objects['x'],objects['y']]).T
