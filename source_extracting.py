@@ -7,7 +7,7 @@ import pylab as plt
 file = "VVDS22H_MOS05-05_NUV.fits"
 hdulist = fits.open(file)
 framecube = hdulist[0].data
-radii = [5.0, 15.0]
+#radii = [5.0, 15.0]
 
 def extract_sources(data):
 	data = data.byteswap(True).newbyteorder()
