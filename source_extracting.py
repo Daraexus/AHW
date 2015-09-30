@@ -59,13 +59,3 @@ def find_all_objects(framecube, bad_frame_mask, pngout):
 				all_extracted_objects = np.asarray([objects['x'],objects['y']]).T
 		#print "total number of objects: ", len(all_extracted_objects)
 	return all_extracted_objects
-
-<<<<<<< HEAD
-#def find_all_objects(framecube):
-#	for i in range(framecube.shape[0]):
-#		fluxes = aperture_photometry(framecube[i,:,:])
-=======
-def find_all_objects(framecube):
-	for i in range(framecube.shape[0]):
-		fluxes = aperture_photometry(framecube[i,:,:])
->>>>>>> 1bb7915d26cb45121777791d780d46ebd77c1aa8
