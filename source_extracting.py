@@ -7,8 +7,11 @@ import pylab as plt
 radii = [5.0, 15.0]
 
 def extract_sources(data):
-#	data = data.byteswap(True).newbyteorder()
-	bkg = sep.Background(data)
+	try:
+		bkg = sep.Background(data)
+	except ValueError:
+		data = data.byteswap(True).newbyteorder()
+		bkg = sep.Background(data)
 	back = bkg.back()
 	data_woback = data-back
 	thresh = 1.5 * bkg.globalrms
