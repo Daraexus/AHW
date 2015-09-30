@@ -14,7 +14,7 @@ def extract_sources(data):
 		bkg = sep.Background(data)
 	back = bkg.back()
 	data_woback = data-back
-	thresh = 1.5 * bkg.globalrms
+	thresh = 3.0 * bkg.globalrms
 	objects = sep.extract(data_woback, thresh)
 	return objects
 
@@ -43,7 +43,7 @@ def plot_frame(data_array,known_objects,xs,ys,num,pngout):
 		plt.plot(known_objects[i][0],known_objects[i][1],'ro')
 	for i in range(len(xs)):
 		plt.plot(xs[i],ys[i],'ko')
-	plt.savefig(pngout)
+	plt.savefig(pngout + num + ".png")
 	plt.clf()
 	return
 
