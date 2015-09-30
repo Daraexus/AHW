@@ -3,6 +3,7 @@ import sep
 from astropy.io import fits
 import matplotlib.path as mplpath
 import pylab as plt
+import os
 
 radii = [5.0, 15.0]
 match_radius = 10
@@ -40,7 +41,7 @@ def plot_frame(data_array,known_objects,xs,ys,num,pngout):
 		plt.plot(known_objects[i][0],known_objects[i][1],'ro')
 	for i in range(len(xs)):
 		plt.plot(xs[i],ys[i],'ko')
-	plt.savefig(pngout + num + ".png")
+	plt.savefig(os.path.splitext(pngout)[0] + "_" + num + ".png")
 	plt.clf()
 	return
 
