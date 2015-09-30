@@ -6,7 +6,7 @@ import ipdb
 import matplotlib.pyplot as pyp
 import numpy
 
-def diff_image(ifile,showplot=False):
+def diff_image(ifile,showplot=False,diffonly=False):
     with fits.open(ifile) as hdulist:
         frame_cube = hdulist[0].data
         frame_wcs = wcs.WCS(hdulist[0].header)
@@ -50,16 +50,20 @@ def diff_image(ifile,showplot=False):
     # This will compute the difference between the max. flux and the min.
     # flux for each pixel across all frames in the cube, ignoring frames
     # identified as having low exposure time.
-    diff_image = (numpy.max(frame_cube[~bad_frames],axis=0) -
-                  numpy.median(frame_cube[~bad_frames],axis=0))
+    if diffonly:
+        diff_image = (numpy.max(frame_cube[~bad_frames],axis=0) -
+                      numpy.median(frame_cube[~bad_frames],axis=0))
     
-    # Write the difference image to a FITS file.
-    file_splits = os.path.splitext(ifile)
-    output_file_name = file_splits[0] + "_diff" + file_splits[1]
-    new_hdu = fits.PrimaryHDU(diff_image)
-    new_hdulist = fits.HDUList([new_hdu])
-    new_hdulist.writeto(output_file_name, clobber=True)
-    return (diff_image, bad_frames, frame_wcs)
+        # Write the difference image to a FITS file.
+        file_splits = os.path.splitext(ifile)
+        output_file_name = file_splits[0] + "_diff" + file_splits[1]
+        new_hdu = fits.PrimaryHDU(diff_image)
+        new_hdulist = fits.HDUList([new_hdu])
+        new_hdulist.writeto(output_file_name, clobber=True)
+        return (diff_image, bad_frames, frame_wcs)
+    else:
+        # Return all frames with mask.
+        return (frame_cube, bad_frames, frame_wcs)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Makes a difference image"
