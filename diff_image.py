@@ -56,6 +56,7 @@ def diff_image(ifile,showplot=False):
         new_hdu = fits.PrimaryHDU(diff_image)
         new_hdulist = fits.HDUList([new_hdu])
         new_hdulist.writeto(output_file_name, clobber=True)
+        return (diff_image, bad_frames)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Makes a difference image"

@@ -4,13 +4,10 @@ from astropy.io import fits
 import matplotlib.path as mplpath
 import pylab as plt
 
-file = "VVDS22H_MOS05-05_NUV.fits"
-hdulist = fits.open(file)
-framecube = hdulist[0].data
 radii = [5.0, 15.0]
 
 def extract_sources(data):
-	data = data.byteswap(True).newbyteorder()
+#	data = data.byteswap(True).newbyteorder()
 	bkg = sep.Background(data)
 	back = bkg.back()
 	data_woback = data-back
@@ -36,24 +33,22 @@ def vertices_of_pixels(xmins, xmaxs, ymins, ymaxs):
 	verts = [[(xmins[i],ymins[i]), (xmaxs[i],ymins[i]), (xmaxs[i],ymaxs[i]), (xmins[i],ymaxs[i])] for i in range(len(xmaxs))]
 	return verts
    
-def plot_frame(data_array,known_objects,xs,ys,num):
+def plot_frame(data_array,known_objects,xs,ys,num,pngout):
 	plt.figure(1)
 	plt.imshow(data_array)
 	for i in range(len(known_objects)):
 		plt.plot(known_objects[i][0],known_objects[i][1],'ro')
 	for i in range(len(xs)):
 		plt.plot(xs[i],ys[i],'ko')
-	plt.savefig('plot_frame_' + num + '.png')
+	plt.savefig(pngout)
 	plt.clf()
 	return
 
-def find_all_objects(framecube):
+def find_all_objects(framecube, bad_frame_mask, pngout):
 	all_extracted_objects = np.array([])
-	for i in range(framecube.shape[0] - 2):
-		#print "frame number: ", i+2
-		objects = extract_sources(framecube[i+2,:,:])
-		plot_frame(framecube[i+2,:,:],all_extracted_objects,objects['x'],objects['y'],str(i+2))
-		#print "number of objects: ", len(objects)
+	for i in range(framecube.shape[0]):
+		objects = extract_sources(framecube[i,:,:])
+		plot_frame(framecube[i,:,:],all_extracted_objects,objects['x'],objects['y'],str(i),pngout)
 		if len(objects) > 0:
 			if len(all_extracted_objects) > 0:
 				vertices = vertices_of_pixels(objects['xmin'], objects['xmax'], objects['ymin'], objects['ymax'])
@@ -63,8 +58,8 @@ def find_all_objects(framecube):
 			else:
 				all_extracted_objects = np.asarray([objects['x'],objects['y']]).T
 		#print "total number of objects: ", len(all_extracted_objects)
-	return unique_extracted_objects
+	return all_extracted_objects
 
-def find_all_objects(framecube):
-	for i in range(framecube.shape[0]):
-		fluxes = aperture_photometry(framecube[i,:,:])
+#def find_all_objects(framecube):
+#	for i in range(framecube.shape[0]):
+#		fluxes = aperture_photometry(framecube[i,:,:])
