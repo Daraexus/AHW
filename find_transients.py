@@ -16,7 +16,7 @@ def find_transients(ifile, pngout, showplot=False, diffonly=False):
         diff_frame = numpy.expand_dims(diff_frame, axis=0)
     # Identify those transient objects that stand out in the difference frame.
     detected_sources_pix = find_all_objects(diff_frame, bad_frames, frame_wcs,
-                                        pngout)
+                                        pngout, ifile)
     # The WCS in the frame is 3D, but the 3rd dimension is useless, so just
     # stick zeroes everywhere.
     detected_sources_coords = frame_wcs.wcs_pix2world(
@@ -45,9 +45,5 @@ if __name__ == "__main__":
                         " base name as the input FITS file + "
                         '"_detsources.png".')
     args=parser.parse_args()
-    if args.png_outputfile == "":
-        args.png_outputfile = (
-            os.path.splitext(os.path.basename(args.ifile))[0] +
-                             "_detsources.png")
     find_transients(args.ifile, args.png_outputfile, showplot=args.show_plot,
                     diffonly=args.diff_only)

@@ -34,7 +34,11 @@ def point_within_distance(existing_points, new_points):
 			new_objects[i] = True
 	return new_objects
    
-def plot_frame(data_array,known_objects,xs,ys,num,pngout):
+def plot_frame(data_array,known_objects,xs,ys,num,ifile,pngout=""):
+	# If not specified, "pngout" = "", so make a default.
+	if pngout == "":
+		pngout = (os.path.splitext(os.path.basename(ifile))[0] +
+			"_detsources.png")
 	plt.figure(1)
 	plt.imshow(data_array)
 	for i in range(len(known_objects)):
@@ -45,11 +49,11 @@ def plot_frame(data_array,known_objects,xs,ys,num,pngout):
 	plt.clf()
 	return
 
-def find_all_objects(framecube, bad_frame_mask, frame_wcs, pngout):
+def find_all_objects(framecube, bad_frame_mask, frame_wcs, pngout, ifile):
 	all_extracted_objects = np.array([])
 	for i in range(framecube.shape[0]):
 		objects = extract_sources(framecube[i,:,:])
-		plot_frame(framecube[i,:,:],all_extracted_objects,objects['x'],objects['y'],str(i),pngout)
+		plot_frame(framecube[i,:,:],all_extracted_objects,objects['x'],objects['y'],str(i),ifile,pngout=pngout)
 		if len(objects) > 0:
 			if len(all_extracted_objects) > 0:
 				new_objects = point_within_distance(all_extracted_objects,np.asarray([objects['x'],objects['y']]).T) #returns array of True and False
