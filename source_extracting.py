@@ -44,7 +44,7 @@ def plot_frame(data_array,known_objects,xs,ys,num,pngout):
 	plt.clf()
 	return
 
-def find_all_objects(framecube, bad_frame_mask, pngout):
+def find_all_objects(framecube, bad_frame_mask, frame_wcs, pngout):
 	all_extracted_objects = np.array([])
 	for i in range(framecube.shape[0]):
 		objects = extract_sources(framecube[i,:,:])

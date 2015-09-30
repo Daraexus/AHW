@@ -3,15 +3,25 @@ from diff_image import diff_image
 from source_extracting import find_all_objects
 import numpy
 import os
+from astropy import wcs
 
 def find_transients(ifile, pngout, showplot=False):
     # Call diff_image to get the difference image frame and a numpy mask of
     # frames to ignore due to a lack of exposure time.
-    diff_frame, bad_frames = diff_image(ifile, showplot=showplot)
+    diff_frame, bad_frames, frame_wcs = diff_image(ifile, showplot=showplot)
     # The source extraction script wants a 3-D array of (nframes,height,width).
     diff_frame = numpy.expand_dims(diff_frame, axis=0)
     # Identify those transient objects that stand out in the difference frame.
-    detected_sources = find_all_objects(diff_frame, bad_frames, pngout)
+    detected_sources_pix = find_all_objects(diff_frame, bad_frames, frame_wcs,
+                                        pngout)
+    # The WCS in the frame is 3D, but the 3rd dimension is useless, so just
+    # stick zeroes everywhere.
+    detected_sources_coords = frame_wcs.wcs_pix2world(
+        numpy.insert(detected_sources_pix,2,0.,axis=1),1)[:,0:2]
+
+    print "Sources Found: (xpix, ypix, RA, DEC)"
+    for pix,coord in zip(detected_sources_pix,detected_sources_coords):
+        print pix[0], pix[1], coord[0], coord[1]
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Given a gMap image cube,"
