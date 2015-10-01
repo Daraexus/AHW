@@ -20,7 +20,7 @@ def find_transients(ifile, pngout, showplot=False, diffonly=False):
     # The WCS in the frame is 3D, but the 3rd dimension is useless, so just
     # stick zeroes everywhere.
     detected_sources_coords = frame_wcs.wcs_pix2world(
-        numpy.insert(detected_sources_pix,2,0.,axis=1),1)[:,0:2]
+        numpy.insert(detected_sources_pix[:,0:2],2,0.,axis=1),1)[:,0:2]
 
     print "Sources Found: (xpix, ypix, RA, DEC)"
     for pix,coord in zip(detected_sources_pix,detected_sources_coords):
