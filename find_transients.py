@@ -5,7 +5,7 @@ import numpy
 import os
 from astropy import wcs
 
-def find_transients(ifile, pngout, showplot=False, diffonly=False):
+def find_transients(ifile, pngout, showplot=False, diffonly=False, quiet=False):
     # Call diff_image to get the difference image frame and a numpy mask of
     # frames to ignore due to a lack of exposure time.
     diff_frame, bad_frames, frame_wcs = diff_image(ifile, showplot=showplot,
@@ -19,12 +19,21 @@ def find_transients(ifile, pngout, showplot=False, diffonly=False):
                                         pngout, ifile)
     # The WCS in the frame is 3D, but the 3rd dimension is useless, so just
     # stick zeroes everywhere.
-    detected_sources_coords = frame_wcs.wcs_pix2world(
-        numpy.insert(detected_sources_pix[:,0:2],2,0.,axis=1),1)[:,0:2]
+    if len(detected_sources_pix) > 0:
+        detected_sources_coords = frame_wcs.wcs_pix2world(
+            numpy.insert(detected_sources_pix[:,0:2],2,0.,axis=1),1)[:,0:2]
+    else:
+        detected_sources_coords = numpy.asarray([])
 
-    print "Sources Found: (xpix, ypix, RA, DEC)"
-    for pix,coord in zip(detected_sources_pix,detected_sources_coords):
-        print pix[0], pix[1], coord[0], coord[1]
+    if not quiet and len(detected_sources_pix) > 0:
+        print "Sources Found: (xpix, ypix, RA, DEC)"
+        for pix,coord in zip(detected_sources_pix,detected_sources_coords):
+            print pix[0], pix[1], coord[0], coord[1]
+
+    if len(detected_sources_pix) > 0:
+        return {"file":ifile,"n_sources":len(detected_sources_coords[:,0]),"xpix":detected_sources_pix[:,0], "ypix":detected_sources_pix[:,1], "ra":detected_sources_coords[:,0], "dec":detected_sources_coords[:,1]}
+    else:
+        return {"file":ifile,"n_sources":0,"xpix":[], "ypix":[], "ra":[], "dec":[]}
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Given a gMap image cube,"
@@ -44,6 +53,8 @@ if __name__ == "__main__":
                         " detected sources.  The default is to use the same"
                         " base name as the input FITS file + "
                         '"_detsources.png".')
+    parser.add_argument("-q", action="store_true", dest="quiet", help="Suppress"
+                        " output to screen?  Default = %(default)s.")
     args=parser.parse_args()
     find_transients(args.ifile, args.png_outputfile, showplot=args.show_plot,
                     diffonly=args.diff_only)

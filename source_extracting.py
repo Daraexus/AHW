@@ -63,5 +63,5 @@ def find_all_objects(framecube, bad_frame_mask, frame_wcs, pngout, ifile):
 			else:
 				new_objects = np.asarray([False]*len(objects))
 				all_extracted_objects = np.asarray([objects['x'],objects['y'],objects['a'],objects['b'],objects['theta']]).T
-		plot_frame(framecube[i,:,:],all_extracted_objects,objects['x'],objects['y'],new_objects,str(i),ifile, vmin, vmax, pngout=pngout)
+			plot_frame(framecube[i,:,:],all_extracted_objects,objects['x'],objects['y'],new_objects,str(i),ifile, vmin, vmax, pngout=pngout)
 	return all_extracted_objects
