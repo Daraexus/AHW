@@ -58,10 +58,10 @@ def find_all_objects(framecube, bad_frame_mask, frame_wcs, pngout, ifile):
 		objects = extract_sources(framecube[i,:,:])
 		if len(objects) > 0:
 			if len(all_extracted_objects) > 0:
-				new_objects = point_within_distance(all_extracted_objects,np.asarray([objects['x'],objects['y']]).T) #returns array of True and False
-				all_extracted_objects = np.vstack((all_extracted_objects, np.asarray([objects['x'][new_objects],objects['y'][new_objects]]).T))
+				new_objects = point_within_distance(all_extracted_objects,np.asarray([objects['x'],objects['y'],objects['a'],objects['b'],objects['theta']]).T) #returns array of True and False
+				all_extracted_objects = np.vstack((all_extracted_objects, np.asarray([objects['x'][new_objects],objects['y'][new_objects],objects['a'][new_objects],objects['b'][new_objects],objects['theta'][new_objects]]).T))
 			else:
 				new_objects = np.asarray([False]*len(objects))
-				all_extracted_objects = np.asarray([objects['x'],objects['y']]).T
+				all_extracted_objects = np.asarray([objects['x'],objects['y'],objects['a'],objects['b'],objects['theta']]).T
 		plot_frame(framecube[i,:,:],all_extracted_objects,objects['x'],objects['y'],new_objects,str(i),ifile, vmin, vmax, pngout=pngout)
 	return all_extracted_objects
