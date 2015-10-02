@@ -44,7 +44,10 @@ def plot_light_curves(diff_cube, unique_extracted_objects):
     plt.figure(2, figsize=(10, 12))
     
     #Bonus: Show the image with the sources on the same colour than the plots.
-    plt.imshow(diff_cube[1], cmap='gray', vmin=1, vmax=12)
+    if len(diff_cube) == 1:
+        plt.imshow(diff_cube[0], cmap='gray', vmin=1, vmax=12)
+    else:
+        plt.imshow(diff_cube[1], cmap='gray', vmin=1, vmax=12)
     plt.colorbar()
 
     for i, extracted_obj in enumerate(unique_extracted_objects):
