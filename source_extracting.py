@@ -41,12 +41,12 @@ def plot_frame(data_array,known_objects,xs,ys,new_objects,num,ifile,vmin, vmax, 
 			"_detsources.png")
 	plt.figure(1)
 	plt.imshow(data_array, vmin=vmin, vmax=vmax, cmap=plt.get_cmap('gray'))
-	for i in range(len(known_objects)):
-		plt.plot(known_objects[i][0],known_objects[i][1],'ko')
-	for i in range(len(xs[~new_objects])):
-		plt.plot(xs[~new_objects][i],ys[~new_objects][i],'go')
-	for i in range(len(xs[new_objects])):
-		plt.plot(xs[new_objects][i],ys[new_objects][i],'ro')
+	#for i in range(len(known_objects)):
+	#	plt.plot(known_objects[i][0],known_objects[i][1],'ko')
+	#for i in range(len(xs[~new_objects])):
+	#	plt.plot(xs[~new_objects][i],ys[~new_objects][i],'go')
+	#for i in range(len(xs[new_objects])):
+	#	plt.plot(xs[new_objects][i],ys[new_objects][i],'ro')
 	plt.savefig(os.path.splitext(pngout)[0] + "_" + num + ".png")
 	plt.clf()
 	return
