@@ -4,6 +4,7 @@ from source_extracting import find_all_objects
 import numpy
 import os
 from astropy import wcs
+from light_curves_plotter import plot_light_curves
 
 def find_transients(ifile, pngout, showplot=False, diffonly=False, quiet=False):
     # Call diff_image to get the difference image frame and a numpy mask of
@@ -24,6 +25,10 @@ def find_transients(ifile, pngout, showplot=False, diffonly=False, quiet=False):
             numpy.insert(detected_sources_pix[:,0:2],2,0.,axis=1),1)[:,0:2]
     else:
         detected_sources_coords = numpy.asarray([])
+
+    # Plot detected sources' lightcurves.
+    if len(detected_sources_pix) > 0:
+        plot_light_curves(diff_frame, detected_sources_pix)
 
     if not quiet and len(detected_sources_pix) > 0:
         print "Sources Found: (xpix, ypix, RA, DEC)"

@@ -2,7 +2,6 @@ import argparse
 import os
 from astropy.io import fits
 from astropy import wcs
-import ipdb
 import matplotlib.pyplot as pyp
 import numpy
 
